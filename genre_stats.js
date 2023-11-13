@@ -1,7 +1,8 @@
 const svg = d3.select("body")
   .append("svg")
-  .attr("width", 392)
-  .attr("height", 312);
+  .attr("id", "group")
+  .attr("width", 1000)
+  .attr("height", 1000);
 
 d3.csv("genre_stats.csv").then(data => {
   data.forEach(d => {
@@ -10,8 +11,8 @@ d3.csv("genre_stats.csv").then(data => {
   });
 
   const margin = {top: 20, right: 30, bottom: 50, left: 40};
-  const width = 392 - margin.left - margin.right;
-  const height = 312 - margin.top - margin.bottom;
+  const width =  600-margin.left - margin.right;
+  const height = 600 - margin.top - margin.bottom;
 
   const xScale = d3.scaleBand()
     .domain(data.map(d => d.Primary_Genre))
@@ -19,9 +20,8 @@ d3.csv("genre_stats.csv").then(data => {
     .paddingInner(0.1);
 
   const yScale = d3.scaleLinear()
-    .domain([0, d3.max(data, d => Math.max(d["Domestic gross ($million)"], d["Foreign Gross ($million)"])])
+    .domain([0, d3.max(data, d => Math.max(d["Domestic gross ($million)"], d["Foreign Gross ($million)"]))])
     .range([height, 0]);
-
 
   const chart = svg.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
@@ -50,7 +50,7 @@ d3.csv("genre_stats.csv").then(data => {
 
   chart.append("g")
     .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(xScale));
+    .call(d3.axisBottom(xScale).ticks(data.length));
 
   chart.append("g")
     .call(d3.axisLeft(yScale));
